@@ -1,5 +1,6 @@
 package cn.year.coretoolkit;
 
+import cn.year.coretoolkit.util.IBaseEnum;
 import cn.year.coretoolkit.util.UserTypeEnum;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -16,6 +17,8 @@ class CoreToolkitApplicationTests {
     @Test
     void testEnum() {
         Assertions.assertTrue(UserTypeEnum.ENABLE.equals(0));
+
+        Assertions.assertEquals(UserTypeEnum.DISABLE, IBaseEnum.getByCode(UserTypeEnum.class, 1));
     }
 
 }
