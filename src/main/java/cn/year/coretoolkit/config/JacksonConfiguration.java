@@ -1,6 +1,9 @@
 package cn.year.coretoolkit.config;
 
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.datatype.jsr310.PackageVersion;
@@ -19,6 +22,7 @@ import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilde
 import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 
+import java.io.IOException;
 import java.math.BigInteger;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -53,31 +57,58 @@ public class JacksonConfiguration {
             builder.failOnUnknownProperties(false);
 
             CustomSimpleModule customSimpleModule = new CustomSimpleModule();
-            customSimpleModule.addSerializer(Long.class, ToStringSerializer.instance);
-            customSimpleModule.addSerializer(Long.TYPE, ToStringSerializer.instance);
+            customSimpleModule.addSerializer(Long.class, LongAccuracyCompatibleSerializer.INSTANCE);
+            customSimpleModule.addSerializer(Long.TYPE, LongAccuracyCompatibleSerializer.INSTANCE);
             customSimpleModule.addSerializer(BigInteger.class, ToStringSerializer.instance);
             builder.modules(customSimpleModule);
 
             logger.info("[new_retail] |- Bean [ObjectMapper] Auto Configure.");
         };
     }
-}
-class CustomSimpleModule extends SimpleModule {
 
-    public CustomSimpleModule() {
-        super(PackageVersion.VERSION);
+    /** 默认时间格式化处理 */
+    private static class CustomSimpleModule extends SimpleModule {
 
-        // yyyy-MM-dd HH:mm:ss
+        public CustomSimpleModule() {
+            super(PackageVersion.VERSION);
+
+            // yyyy-MM-dd HH:mm:ss
 //        this.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(DatePattern.NORM_DATETIME_FORMATTER));
 //        this.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(DatePattern.NORM_DATETIME_FORMATTER));
-        // yyyy-MM-dd
-        this.addSerializer(LocalDate.class, new LocalDateSerializer(DateTimeFormatter.ISO_LOCAL_DATE));
-        this.addDeserializer(LocalDate.class, new LocalDateDeserializer(DateTimeFormatter.ISO_LOCAL_DATE));
-        // HH:mm:ss
-        this.addSerializer(LocalTime.class, new LocalTimeSerializer(DateTimeFormatter.ISO_LOCAL_TIME));
-        this.addDeserializer(LocalTime.class, new LocalTimeDeserializer(DateTimeFormatter.ISO_LOCAL_TIME));
-        // Instant 类型序列化
-        this.addSerializer(Instant.class, InstantSerializer.INSTANCE);
-        this.addDeserializer(Instant.class, InstantDeserializer.INSTANT);
+            // yyyy-MM-dd
+            this.addSerializer(LocalDate.class, new LocalDateSerializer(DateTimeFormatter.ISO_LOCAL_DATE));
+            this.addDeserializer(LocalDate.class, new LocalDateDeserializer(DateTimeFormatter.ISO_LOCAL_DATE));
+            // HH:mm:ss
+            this.addSerializer(LocalTime.class, new LocalTimeSerializer(DateTimeFormatter.ISO_LOCAL_TIME));
+            this.addDeserializer(LocalTime.class, new LocalTimeDeserializer(DateTimeFormatter.ISO_LOCAL_TIME));
+            // Instant 类型序列化
+            this.addSerializer(Instant.class, InstantSerializer.INSTANCE);
+            this.addDeserializer(Instant.class, InstantDeserializer.INSTANT);
+        }
+    }
+
+    /**
+     * Long 精度兼容的序列化器
+     */
+    private static class LongAccuracyCompatibleSerializer extends JsonSerializer<Long> {
+        /** 实例化 */
+        private static LongAccuracyCompatibleSerializer INSTANCE = new LongAccuracyCompatibleSerializer();
+        /** JavaScript 中能精准表示的最大整数 2^53: 9007199254740992 */
+        private static final Long JS_MAX_NUMBER = Double.valueOf(Math.pow(2, 53)).longValue();
+
+        private LongAccuracyCompatibleSerializer() {
+            if (INSTANCE != null) {
+                throw new UnsupportedOperationException();
+            }
+        }
+
+        @Override
+        public void serialize(Long value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
+            if (value.compareTo(JS_MAX_NUMBER) < 0) {
+                gen.writeNumber(value);
+            } else {
+                gen.writeString(String.valueOf(value));
+            }
+        }
     }
 }
