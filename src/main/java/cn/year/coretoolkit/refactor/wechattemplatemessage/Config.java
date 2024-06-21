@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
+ * 模拟 weixin-java-mp 的微信服务配置类
  * @author YearOfTheRain
  * @create 2024-06-17  14:56
  */
