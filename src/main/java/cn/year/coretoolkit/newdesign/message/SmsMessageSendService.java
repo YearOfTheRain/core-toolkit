@@ -35,7 +35,7 @@ public class SmsMessageSendService implements IMessageSendService<SmsTemplateBas
 
     @Override
     public void send(MessageSendInfo<SmsTemplateBase, SmsMessageReceiver> messageSendInfo) {
-        MessageTemplate messageTemplate = messageSendInfo.getMessageTemplate();
+        SmsTemplateBase messageTemplate = messageSendInfo.getMessageTemplate();
         List<SmsMessageReceiver> messageReceivers = messageSendInfo.getMessageReceivers();
         if (CollectionUtil.isEmpty(messageReceivers)) {
             throw new CustomerMessageBuildException("messageReceivers is empty");
@@ -44,12 +44,8 @@ public class SmsMessageSendService implements IMessageSendService<SmsTemplateBas
         if (Objects.isNull(messageTemplate)) {
             throw new CustomerMessageBuildException("messageTemplate is null");
         }
-        if (messageTemplate instanceof TemplateTypeAble) {
-            if (((TemplateTypeAble)messageTemplate).getTemplateType() != TemplateTypeEnum.SMS) {
-                throw new CustomerMessageBuildException("messageTemplate is not sms");
-            }
-        } else {
-            throw new CustomerMessageBuildException("messageTemplate is not valid");
+        if (messageTemplate.getTemplateType() != TemplateTypeEnum.SMS) {
+            throw new CustomerMessageBuildException("messageTemplate is not sms");
         }
         log.info("do send sms operation");
 

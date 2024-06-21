@@ -1,15 +1,12 @@
 package cn.year.coretoolkit.newdesign.message;
 
 import cn.hutool.core.util.StrUtil;
-import cn.year.coretoolkit.newdesign.message.receiver.MessageReceiver;
 import cn.year.coretoolkit.newdesign.message.receiver.PublicMessageReceiver;
-import cn.year.coretoolkit.newdesign.message.template.MessageTemplate;
 import cn.year.coretoolkit.newdesign.message.template.PublicTemplateBase;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.mp.bean.template.WxMpTemplateData;
 import me.chanjar.weixin.mp.bean.template.WxMpTemplateMessage;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -27,21 +24,17 @@ public class PublicMessageSendService implements IMessageSendService<PublicTempl
 
     @Override
     public void send(MessageSendInfo<PublicTemplateBase, PublicMessageReceiver> messageSendInfo) {
-        MessageTemplate messageTemplate = messageSendInfo.getMessageTemplate();
+        PublicTemplateBase messageTemplate = messageSendInfo.getMessageTemplate();
         List<PublicMessageReceiver> messageReceivers = messageSendInfo.getMessageReceivers();
 
         if (messageReceivers.isEmpty()) {
             throw new CustomerMessageSendException("message receiver is empty");
         }
-        if (messageTemplate instanceof TemplateTypeAble) {
-            if (((TemplateTypeAble)messageTemplate).getTemplateType() != TemplateTypeEnum.PUBLIC) {
-                throw new CustomerMessageBuildException("messageTemplate is not wechat public");
-            }
-        } else {
-            throw new CustomerMessageBuildException("messageTemplate is not valid");
+        if (messageTemplate.getTemplateType() != TemplateTypeEnum.PUBLIC) {
+            throw new CustomerMessageBuildException("messageTemplate is not wechat public");
         }
         log.info("do send  wechat public operation");
-        messageReceivers.forEach(receiver -> doSend((PublicTemplateBase)messageTemplate, receiver));
+        messageReceivers.forEach(receiver -> doSend(messageTemplate, receiver));
         log.info("do send success");
     }
 

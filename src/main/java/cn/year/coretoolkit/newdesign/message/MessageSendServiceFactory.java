@@ -12,7 +12,7 @@ public class MessageSendServiceFactory {
 //            case EMAIL:
 //                return new EmailMessageSendService();
             case SMS:
-                messageSendService =  new SmsMessageSendService();
+                messageSendService = new SmsMessageSendService();
                 break;
             case PUBLIC:
                 messageSendService = new PublicMessageSendService();

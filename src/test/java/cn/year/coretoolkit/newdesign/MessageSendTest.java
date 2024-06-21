@@ -26,11 +26,17 @@ public class MessageSendTest{
 //                ValidCodeSmsTemplate.create("123456", 26L),
 //                Collections.singletonList(SmsMessageReceiver.create("13800000000"))
 //        );
+//        PublicMessageReceiver receiver = new PublicMessageReceiver();
+//        receiver.setOpenid("13800000000");
+//        MessageSendInfo messageSendInfo = new MessageSendInfo(TemplateTypeEnum.PUBLIC,
+//                BuySuccessTmp.create("123456", new Date(), "new Date()", new BigDecimal("156"), "微信支付"),
+//                Collections.singletonList(receiver)
+//        );
         PublicMessageReceiver receiver = new PublicMessageReceiver();
         receiver.setOpenid("13800000000");
-        MessageSendInfo messageSendInfo = new MessageSendInfo(TemplateTypeEnum.PUBLIC,
+        MessageSendInfo messageSendInfo = new MessageSendInfo(TemplateTypeEnum.SMS,
                 BuySuccessTmp.create("123456", new Date(), "new Date()", new BigDecimal("156"), "微信支付"),
-                Collections.singletonList(receiver)
+                Collections.singletonList(SmsMessageReceiver.create("13800000000"))
         );
         MessageSendServiceFactory.sender(messageSendInfo);
     }
