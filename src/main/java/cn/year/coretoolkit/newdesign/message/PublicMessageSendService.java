@@ -24,6 +24,7 @@ public class PublicMessageSendService implements IMessageSendService<PublicTempl
 
     @Override
     public void send(MessageSendInfo<PublicTemplateBase, PublicMessageReceiver> messageSendInfo) {
+        messageSendInfo.checkParam();
         PublicTemplateBase messageTemplate = messageSendInfo.getMessageTemplate();
         List<PublicMessageReceiver> messageReceivers = messageSendInfo.getMessageReceivers();
 

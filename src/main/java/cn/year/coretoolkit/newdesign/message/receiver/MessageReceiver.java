@@ -1,5 +1,6 @@
 package cn.year.coretoolkit.newdesign.message.receiver;
 
+import cn.year.coretoolkit.newdesign.message.TemplateTypeAble;
 import lombok.Data;
 
 /**
@@ -8,6 +9,6 @@ import lombok.Data;
  * @create 2024-06-20  11:35
  */
 @Data
-public class MessageReceiver {
+public abstract class MessageReceiver implements TemplateTypeAble {
 
 }

@@ -1,7 +1,6 @@
 package cn.year.coretoolkit.newdesign.message.template;
 
 import cn.hutool.core.util.ObjectUtil;
-import cn.year.coretoolkit.newdesign.message.TemplateTypeAble;
 import cn.year.coretoolkit.newdesign.message.TemplateTypeEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -15,7 +14,7 @@ import java.text.SimpleDateFormat;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public abstract class PublicTemplateBase extends MessageTemplate implements Serializable, TemplateTypeAble {
+public abstract class PublicTemplateBase extends MessageTemplate implements Serializable {
 
     private static final long serialVersionUID = -1163827644019643611L;
 

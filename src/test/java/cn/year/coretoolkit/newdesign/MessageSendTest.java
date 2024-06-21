@@ -1,5 +1,6 @@
 package cn.year.coretoolkit.newdesign;
 
+import cn.hutool.core.lang.Assert;
 import cn.year.coretoolkit.newdesign.message.MessageSendInfo;
 import cn.year.coretoolkit.newdesign.message.MessageSendServiceFactory;
 import cn.year.coretoolkit.newdesign.message.TemplateTypeEnum;
@@ -20,24 +21,39 @@ import java.util.Date;
 public class MessageSendTest{
 
     @Test
-    void testSend() {
-
-//        MessageSendInfo messageSendInfo = new MessageSendInfo(TemplateTypeEnum.SMS,
-//                ValidCodeSmsTemplate.create("123456", 26L),
-//                Collections.singletonList(SmsMessageReceiver.create("13800000000"))
-//        );
-//        PublicMessageReceiver receiver = new PublicMessageReceiver();
-//        receiver.setOpenid("13800000000");
-//        MessageSendInfo messageSendInfo = new MessageSendInfo(TemplateTypeEnum.PUBLIC,
-//                BuySuccessTmp.create("123456", new Date(), "new Date()", new BigDecimal("156"), "微信支付"),
-//                Collections.singletonList(receiver)
-//        );
-        PublicMessageReceiver receiver = new PublicMessageReceiver();
-        receiver.setOpenid("13800000000");
+    void testSendSms() {
         MessageSendInfo messageSendInfo = new MessageSendInfo(TemplateTypeEnum.SMS,
-                BuySuccessTmp.create("123456", new Date(), "new Date()", new BigDecimal("156"), "微信支付"),
+                ValidCodeSmsTemplate.create("123456", 26L),
                 Collections.singletonList(SmsMessageReceiver.create("13800000000"))
         );
         MessageSendServiceFactory.sender(messageSendInfo);
+    }
+
+    @Test
+    void testSendPublic() {
+
+        PublicMessageReceiver receiver = new PublicMessageReceiver();
+        receiver.setOpenid("13800000000");
+        MessageSendInfo messageSendInfo = new MessageSendInfo(TemplateTypeEnum.PUBLIC,
+                BuySuccessTmp.create("123456", new Date(), "new Date()", new BigDecimal("156"), "微信支付"),
+                Collections.singletonList(receiver)
+        );
+        MessageSendServiceFactory.sender(messageSendInfo);
+    }
+
+    @Test
+    void testSendNotMatch() {
+
+        PublicMessageReceiver receiver = new PublicMessageReceiver();
+        receiver.setOpenid("13800000000");
+        MessageSendInfo messageSendInfo = new MessageSendInfo(TemplateTypeEnum.PUBLIC,
+                BuySuccessTmp.create("123456", new Date(), "new Date()", new BigDecimal("156"), "微信支付"),
+                Collections.singletonList(SmsMessageReceiver.create("13800000000"))
+        );
+        try {
+            MessageSendServiceFactory.sender(messageSendInfo);
+        } catch (Exception e) {
+            Assert.isTrue(e.getMessage().equals("有消息类型与消息接收者不匹配"));
+        }
     }
 }

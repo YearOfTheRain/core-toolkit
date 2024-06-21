@@ -35,6 +35,7 @@ public class SmsMessageSendService implements IMessageSendService<SmsTemplateBas
 
     @Override
     public void send(MessageSendInfo<SmsTemplateBase, SmsMessageReceiver> messageSendInfo) {
+        messageSendInfo.checkParam();
         SmsTemplateBase messageTemplate = messageSendInfo.getMessageTemplate();
         List<SmsMessageReceiver> messageReceivers = messageSendInfo.getMessageReceivers();
         if (CollectionUtil.isEmpty(messageReceivers)) {

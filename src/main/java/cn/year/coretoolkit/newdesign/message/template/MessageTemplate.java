@@ -1,5 +1,7 @@
 package cn.year.coretoolkit.newdesign.message.template;
 
+import cn.year.coretoolkit.newdesign.message.TemplateTypeAble;
+
 import java.util.Map;
 
 /**
@@ -7,7 +9,7 @@ import java.util.Map;
  * @author YearOfTheRain
  * @create 2024-06-20  11:25
  */
-public abstract class MessageTemplate {
+public abstract class MessageTemplate implements TemplateTypeAble {
 
     /**
      * 获取模板ID

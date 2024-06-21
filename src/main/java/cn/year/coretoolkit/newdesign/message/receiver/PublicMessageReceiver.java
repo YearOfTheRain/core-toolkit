@@ -1,5 +1,6 @@
 package cn.year.coretoolkit.newdesign.message.receiver;
 
+import cn.year.coretoolkit.newdesign.message.TemplateTypeEnum;
 import lombok.Data;
 
 /**
@@ -8,6 +9,11 @@ import lombok.Data;
  */
 @Data
 public class PublicMessageReceiver extends MessageReceiver {
+
+    @Override
+    public TemplateTypeEnum getTemplateType() {
+        return TemplateTypeEnum.PUBLIC;
+    }
 
     //userId，openid 填写其中一个
     /**
