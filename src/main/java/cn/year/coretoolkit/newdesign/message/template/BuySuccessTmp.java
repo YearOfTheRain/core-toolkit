@@ -1,7 +1,5 @@
 package cn.year.coretoolkit.newdesign.message.template;
 
-import lombok.Getter;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -12,7 +10,6 @@ import java.util.Map;
 /**
  * 购买成功消息推送模板
  */
-@Getter
 public class BuySuccessTmp extends PublicTemplateBase implements Serializable {
     private static final long serialVersionUID = 1L;
     /**
@@ -67,7 +64,7 @@ public class BuySuccessTmp extends PublicTemplateBase implements Serializable {
     public Map<String, String> templateParameters() {
         Map<String, String> parameter = new HashMap<>(8);
         parameter.put("character_string2", this.orderNo);
-        parameter.put("thing3", this.orderNo);
+        parameter.put("thing3", this.goodsName);
         parameter.put("thing6", this.paymentMethod);
         parameter.put("amount5", this.paymentAmount.setScale(2, RoundingMode.DOWN).toPlainString());
         parameter.put("time4", SIMPLE_DATE_FORMAT.format(this.buyTime));

@@ -15,7 +15,7 @@ import java.util.Map;
  * @create 2024-06-21  11:19
  */
 @Slf4j
-public class PublicMessageSendService implements IMessageSendService<PublicTemplateBase, PublicMessageReceiver> {
+public class PublicMessageSendServiceImpl implements IMessageSendService<PublicTemplateBase, PublicMessageReceiver> {
 
     @Override
     public TemplateTypeEnum getTemplateType() {

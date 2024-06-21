@@ -22,7 +22,7 @@ import java.util.Objects;
  * @create 2024-06-21  11:19
  */
 @Slf4j
-public class SmsMessageSendService implements IMessageSendService<SmsTemplateBase, SmsMessageReceiver> {
+public class SmsMessageSendServiceImpl implements IMessageSendService<SmsTemplateBase, SmsMessageReceiver> {
 
     private SendSmsResponse res;
     private final HashMap<String, String> result = new HashMap<>();

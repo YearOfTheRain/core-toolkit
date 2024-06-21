@@ -10,7 +10,6 @@ import java.util.Map;
  * @author YearOfTheRain
  * @create 2024-06-21  10:06
  */
-@Getter
 public class ValidCodeSmsTemplate extends SmsTemplateBase {
 
     /** 验证码 */

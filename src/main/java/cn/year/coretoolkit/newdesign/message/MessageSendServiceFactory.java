@@ -12,10 +12,10 @@ public class MessageSendServiceFactory {
 //            case EMAIL:
 //                return new EmailMessageSendService();
             case SMS:
-                messageSendService = new SmsMessageSendService();
+                messageSendService = new SmsMessageSendServiceImpl();
                 break;
             case PUBLIC:
-                messageSendService = new PublicMessageSendService();
+                messageSendService = new PublicMessageSendServiceImpl();
                 break;
             default:
                 throw new CustomerMessageSendException("不支持的消息类型");
